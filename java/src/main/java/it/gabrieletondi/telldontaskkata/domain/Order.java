@@ -68,7 +68,7 @@ public class Order {
 		return this.status == CREATED;
 	}
 
-	public void setRejected() {
+	public void rejected() {
 		if ( !canReject() ) {
 			throw new IllegalStateException();
 		}
@@ -79,7 +79,7 @@ public class Order {
 		return this.status == APPROVED;
 	}
 
-	public void setShipped() {
+	public void shipped() {
 		if ( !canShip() ) {
 			throw new IllegalStateException();
 		}

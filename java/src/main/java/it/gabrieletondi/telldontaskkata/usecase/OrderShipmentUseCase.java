@@ -18,7 +18,7 @@ public class OrderShipmentUseCase {
 
         if ( order.canShip() ) {
             shipmentService.ship( order );
-            order.setShipped();
+            order.shipped();
         } else {
             throw new IllegalOperationException();
         }

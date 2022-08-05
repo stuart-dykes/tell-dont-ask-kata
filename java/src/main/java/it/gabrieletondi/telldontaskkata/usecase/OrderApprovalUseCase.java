@@ -21,7 +21,7 @@ public class OrderApprovalUseCase {
 	private void rejectOrder( final int orderId ) {
 		final Order order = orderRepository.getById( orderId );
 		if ( order.canReject() ) {
-			order.setRejected();
+			order.rejected();
 			orderRepository.save( order );
 		} else {
 			throw new IllegalOperationException();

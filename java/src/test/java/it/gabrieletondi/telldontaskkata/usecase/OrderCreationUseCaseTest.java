@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import it.gabrieletondi.telldontaskkata.domain.Category;
 import it.gabrieletondi.telldontaskkata.domain.Order;
+import it.gabrieletondi.telldontaskkata.domain.OrderItem;
 import it.gabrieletondi.telldontaskkata.domain.OrderStatus;
 import it.gabrieletondi.telldontaskkata.domain.Product;
 import it.gabrieletondi.telldontaskkata.doubles.InMemoryProductCatalog;
@@ -37,29 +38,24 @@ class OrderCreationUseCaseTest {
 
 		useCase.run( request );
 
-		final Order insertedOrder = orderRepository.getSavedOrder();
-		assertThat( insertedOrder.getStatus() ).isEqualTo( OrderStatus.CREATED );
-		assertThat( insertedOrder.getTotal() ).isEqualTo( new BigDecimal( "23.20" ) );
-		assertThat( insertedOrder.getTax() ).isEqualTo( new BigDecimal( "2.13" ) );
-		assertThat( insertedOrder.getCurrency() ).isEqualTo( "EUR" );
-		assertThat( insertedOrder.getItems() ).hasSize( 2 );
-		assertThat( insertedOrder.getItems().get( 0 ).getProduct().getName() ).isEqualTo( "salad" );
-		assertThat( insertedOrder.getItems().get( 0 ).getProduct().getPrice() ).isEqualTo(
-				new BigDecimal( "3.56" ) );
-		assertThat( insertedOrder.getItems().get( 0 ).getQuantity() ).isEqualTo( 2 );
-		assertThat( insertedOrder.getItems().get( 0 ).getTaxedAmount() ).isEqualTo(
-				new BigDecimal( "7.84" ) );
-		assertThat( insertedOrder.getItems().get( 0 ).getTax() ).isEqualTo(
-				new BigDecimal( "0.72" ) );
-		assertThat( insertedOrder.getItems().get( 1 ).getProduct().getName() ).isEqualTo(
-				"tomato" );
-		assertThat( insertedOrder.getItems().get( 1 ).getProduct().getPrice() ).isEqualTo(
-				new BigDecimal( "4.65" ) );
-		assertThat( insertedOrder.getItems().get( 1 ).getQuantity() ).isEqualTo( 3 );
-		assertThat( insertedOrder.getItems().get( 1 ).getTaxedAmount() ).isEqualTo(
-				new BigDecimal( "15.36" ) );
-		assertThat( insertedOrder.getItems().get( 1 ).getTax() ).isEqualTo(
-				new BigDecimal( "1.41" ) );
+		final Order order = orderRepository.getSavedOrder();
+		assertThat( order.getStatus() ).isEqualTo( OrderStatus.CREATED );
+		assertThat( order.getTotal() ).isEqualTo( new BigDecimal( "23.20" ) );
+		assertThat( order.getTax() ).isEqualTo( new BigDecimal( "2.13" ) );
+		assertThat( order.getCurrency() ).isEqualTo( "EUR" );
+		assertThat( order.getItems() ).hasSize( 2 );
+		final OrderItem item1 = order.getItems().get( 0 );
+		assertThat( item1.getProduct().getName() ).isEqualTo( "salad" );
+		assertThat( item1.getProduct().getPrice() ).isEqualTo( new BigDecimal( "3.56" ) );
+		assertThat( item1.getQuantity() ).isEqualTo( 2 );
+		assertThat( item1.getTaxedAmount() ).isEqualTo( new BigDecimal( "7.84" ) );
+		assertThat( item1.getTax() ).isEqualTo( new BigDecimal( "0.72" ) );
+		final OrderItem item2 = order.getItems().get( 1 );
+		assertThat( item2.getProduct().getName() ).isEqualTo( "tomato" );
+		assertThat( item2.getProduct().getPrice() ).isEqualTo( new BigDecimal( "4.65" ) );
+		assertThat( item2.getQuantity() ).isEqualTo( 3 );
+		assertThat( item2.getTaxedAmount() ).isEqualTo( new BigDecimal( "15.36" ) );
+		assertThat( item2.getTax() ).isEqualTo( new BigDecimal( "1.41" ) );
 	}
 
 	@Test
