@@ -36,7 +36,7 @@ public class OrderCreationUseCase {
                 throw new UnknownProductException();
             }
             else {
-                final BigDecimal taxAmount = getTaxAmount( itemRequest, product );
+                final BigDecimal taxAmount = getTaxAmount( product, itemRequest.getQuantity() );
 
                 final BigDecimal unitaryTaxedAmount = product.getUnitaryTaxedAmount();
                 final BigDecimal taxedAmount = unitaryTaxedAmount.multiply(
@@ -55,10 +55,9 @@ public class OrderCreationUseCase {
         orderRepository.save( order );
     }
 
-    private BigDecimal getTaxAmount( final SellItemRequest itemRequest, final Product product ) {
+    private BigDecimal getTaxAmount( final Product product, final int quantity ) {
         final BigDecimal unitaryTax = product.getUnitaryTax();
-        final BigDecimal taxAmount = unitaryTax.multiply(
-                BigDecimal.valueOf( itemRequest.getQuantity() ) );
+        final BigDecimal taxAmount = unitaryTax.multiply( BigDecimal.valueOf( quantity ) );
         return taxAmount;
     }
 
