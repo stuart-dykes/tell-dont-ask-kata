@@ -29,13 +29,8 @@ class OrderCreationUseCaseTest {
 
 	@Test
 	void sellMultipleItems() {
-		SellItemRequest saladRequest = new SellItemRequest();
-		saladRequest.setProductName( "salad" );
-		saladRequest.setQuantity( 2 );
-
-		SellItemRequest tomatoRequest = new SellItemRequest();
-		tomatoRequest.setProductName( "tomato" );
-		tomatoRequest.setQuantity( 3 );
+		SellItemRequest saladRequest = new SellItemRequest( "salad", 2 );
+		SellItemRequest tomatoRequest = new SellItemRequest( "tomato", 3 );
 
 		final SellItemsRequest request = new SellItemsRequest();
 		request.setRequests( new ArrayList<>() );
@@ -73,8 +68,7 @@ class OrderCreationUseCaseTest {
 	void unknownProduct() {
 		SellItemsRequest request = new SellItemsRequest();
 		request.setRequests( new ArrayList<>() );
-		SellItemRequest unknownProductRequest = new SellItemRequest();
-		unknownProductRequest.setProductName( "unknown product" );
+		SellItemRequest unknownProductRequest = new SellItemRequest( "unknown product", 1 );
 		request.getRequests().add( unknownProductRequest );
 
 		assertThatThrownBy( () -> useCase.run( request ) ).isExactlyInstanceOf(
