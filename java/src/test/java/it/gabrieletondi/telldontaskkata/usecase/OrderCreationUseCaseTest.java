@@ -1,5 +1,14 @@
 package it.gabrieletondi.telldontaskkata.usecase;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
+
 import it.gabrieletondi.telldontaskkata.domain.Category;
 import it.gabrieletondi.telldontaskkata.domain.Order;
 import it.gabrieletondi.telldontaskkata.domain.OrderStatus;
@@ -8,21 +17,10 @@ import it.gabrieletondi.telldontaskkata.doubles.InMemoryProductCatalog;
 import it.gabrieletondi.telldontaskkata.doubles.TestOrderRepository;
 import it.gabrieletondi.telldontaskkata.repository.ProductCatalog;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 class OrderCreationUseCaseTest {
 	private final TestOrderRepository orderRepository = new TestOrderRepository();
-	private final Category food = new Category() {{
-		setName( "food" );
-		setTaxPercentage( new BigDecimal( "10" ) );
-	}};
+	private final Category food = new Category( "food", new BigDecimal( "10" ) );
+
 	private final ProductCatalog productCatalog = new InMemoryProductCatalog(
 			Arrays.asList( new Product() {{
 				setName( "salad" );
