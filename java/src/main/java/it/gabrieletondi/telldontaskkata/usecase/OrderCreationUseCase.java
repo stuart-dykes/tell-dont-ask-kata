@@ -1,17 +1,16 @@
 package it.gabrieletondi.telldontaskkata.usecase;
 
+import static java.math.RoundingMode.HALF_UP;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+
 import it.gabrieletondi.telldontaskkata.domain.Order;
 import it.gabrieletondi.telldontaskkata.domain.OrderItem;
 import it.gabrieletondi.telldontaskkata.domain.OrderStatus;
 import it.gabrieletondi.telldontaskkata.domain.Product;
 import it.gabrieletondi.telldontaskkata.repository.OrderRepository;
 import it.gabrieletondi.telldontaskkata.repository.ProductCatalog;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-
-import static java.math.BigDecimal.valueOf;
-import static java.math.RoundingMode.HALF_UP;
 
 public class OrderCreationUseCase {
     private final OrderRepository orderRepository;
@@ -47,9 +46,9 @@ public class OrderCreationUseCase {
                 orderItem.setQuantity(itemRequest.getQuantity());
                 orderItem.setTax(taxAmount);
                 orderItem.setTaxedAmount(taxedAmount);
-                order.getItems().add(orderItem);
 
-                order.setTotal(order.getTotal().add(taxedAmount));
+                order.addItem( orderItem );
+                order.setTotal( order.getTotal().add( taxedAmount ) );
                 order.setTax(order.getTax().add(taxAmount));
             }
         }

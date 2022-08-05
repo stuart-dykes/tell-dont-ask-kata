@@ -55,7 +55,11 @@ public class Order {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId( int id ) {
         this.id = id;
+    }
+
+    public void addItem( final OrderItem item ) {
+        items.add( item );
     }
 }
