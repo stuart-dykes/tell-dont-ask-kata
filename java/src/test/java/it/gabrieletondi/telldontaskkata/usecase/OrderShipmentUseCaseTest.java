@@ -11,6 +11,8 @@ import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.SHIPPED;
 import org.junit.jupiter.api.Test;
 
 import it.gabrieletondi.telldontaskkata.domain.Order;
+import it.gabrieletondi.telldontaskkata.domain.OrderCannotBeShippedException;
+import it.gabrieletondi.telldontaskkata.domain.OrderCannotBeShippedTwiceException;
 import it.gabrieletondi.telldontaskkata.doubles.TestOrderRepository;
 import it.gabrieletondi.telldontaskkata.doubles.TestShipmentService;
 

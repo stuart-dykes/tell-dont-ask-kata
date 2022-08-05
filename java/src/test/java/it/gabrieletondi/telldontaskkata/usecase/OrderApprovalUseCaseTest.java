@@ -10,7 +10,10 @@ import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.SHIPPED;
 
 import org.junit.jupiter.api.Test;
 
+import it.gabrieletondi.telldontaskkata.domain.ApprovedOrderCannotBeRejectedException;
 import it.gabrieletondi.telldontaskkata.domain.Order;
+import it.gabrieletondi.telldontaskkata.domain.RejectedOrderCannotBeApprovedException;
+import it.gabrieletondi.telldontaskkata.domain.ShippedOrdersCannotBeChangedException;
 import it.gabrieletondi.telldontaskkata.doubles.TestOrderRepository;
 
 class OrderApprovalUseCaseTest {

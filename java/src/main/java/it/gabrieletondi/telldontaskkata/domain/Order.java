@@ -10,12 +10,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.gabrieletondi.telldontaskkata.usecase.ApprovedOrderCannotBeRejectedException;
-import it.gabrieletondi.telldontaskkata.usecase.OrderCannotBeShippedException;
-import it.gabrieletondi.telldontaskkata.usecase.OrderCannotBeShippedTwiceException;
-import it.gabrieletondi.telldontaskkata.usecase.RejectedOrderCannotBeApprovedException;
-import it.gabrieletondi.telldontaskkata.usecase.ShippedOrdersCannotBeChangedException;
-
 public class Order {
 	private static final String EUR = "EUR";
 
