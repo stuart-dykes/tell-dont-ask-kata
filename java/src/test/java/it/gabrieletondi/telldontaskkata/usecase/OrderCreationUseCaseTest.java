@@ -79,7 +79,7 @@ class OrderCreationUseCaseTest {
 	}
 
 	@Test
-	public void unknownProduct() {
+	void unknownProduct() {
 		SellItemsRequest request = new SellItemsRequest();
 		request.setRequests( new ArrayList<>() );
 		SellItemRequest unknownProductRequest = new SellItemRequest();
