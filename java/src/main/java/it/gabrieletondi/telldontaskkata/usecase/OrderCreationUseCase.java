@@ -38,18 +38,20 @@ public class OrderCreationUseCase {
             else {
                 final BigDecimal unitaryTax = product.getUnitaryTax();
                 final BigDecimal unitaryTaxedAmount = product.getUnitaryTaxedAmount();
-                final BigDecimal taxedAmount = unitaryTaxedAmount.multiply(BigDecimal.valueOf(itemRequest.getQuantity())).setScale(2, HALF_UP);
-                final BigDecimal taxAmount = unitaryTax.multiply(BigDecimal.valueOf(itemRequest.getQuantity()));
+                final BigDecimal taxedAmount = unitaryTaxedAmount.multiply(
+                        BigDecimal.valueOf( itemRequest.getQuantity() ) ).setScale( 2, HALF_UP );
+                final BigDecimal taxAmount = unitaryTax.multiply(
+                        BigDecimal.valueOf( itemRequest.getQuantity() ) );
 
                 final OrderItem orderItem = new OrderItem();
-                orderItem.setProduct(product);
-                orderItem.setQuantity(itemRequest.getQuantity());
-                orderItem.setTax(taxAmount);
-                orderItem.setTaxedAmount(taxedAmount);
+                orderItem.setProduct( product );
+                orderItem.setQuantity( itemRequest.getQuantity() );
+                orderItem.setTax( taxAmount );
+                orderItem.setTaxedAmount( taxedAmount );
 
                 order.addItem( orderItem );
-                order.setTotal( order.getTotal().add( taxedAmount ) );
-                order.setTax(order.getTax().add(taxAmount));
+                order.setTotal( order.getTotal().add( orderItem.getTaxedAmount() ) );
+                order.setTax( order.getTax().add( orderItem.getTax() ) );
             }
         }
 
