@@ -66,7 +66,7 @@ public class Order {
         setTax( getTax().add( item.getTax() ) );
     }
 
-    public static Order createOrder() {
+    public static Order create() {
         final Order order = new Order();
         order.setStatus( OrderStatus.CREATED );
         order.setItems( new ArrayList<>() );
