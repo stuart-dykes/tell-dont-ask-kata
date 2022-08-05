@@ -15,10 +15,9 @@ import it.gabrieletondi.telldontaskkata.usecase.RejectedOrderCannotBeApprovedExc
 import it.gabrieletondi.telldontaskkata.usecase.ShippedOrdersCannotBeChangedException;
 
 public class Order {
-    private BigDecimal total;
-    private String currency;
-    private List<OrderItem> items;
-    private BigDecimal tax;
+    private final List<OrderItem> items = new ArrayList<>();
+    private BigDecimal tax = new BigDecimal( "0.00" );
+    private BigDecimal total = new BigDecimal( "0.00" );
     private OrderStatus status;
     private int id;
 
@@ -31,7 +30,7 @@ public class Order {
     }
 
     public String getCurrency() {
-        return currency;
+        return "EUR";
     }
 
     public List<OrderItem> getItems() {
@@ -55,12 +54,7 @@ public class Order {
     }
 
     public static Order create() {
-        final Order order = new Order( OrderStatus.CREATED );
-        order.items = new ArrayList<>();
-        order.currency = "EUR";
-        order.total = new BigDecimal( "0.00" );
-        order.tax = new BigDecimal( "0.00" );
-        return order;
+        return new Order( OrderStatus.CREATED );
     }
 
     public void addItem( final OrderItem item ) {
