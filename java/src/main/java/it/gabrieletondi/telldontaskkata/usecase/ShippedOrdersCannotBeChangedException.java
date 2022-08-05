@@ -1,4 +1,4 @@
-package it.gabrieletondi.telldontaskkata.useCase;
+package it.gabrieletondi.telldontaskkata.usecase;
 
 public class ShippedOrdersCannotBeChangedException extends RuntimeException {
 }
