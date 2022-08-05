@@ -2,7 +2,6 @@ package it.gabrieletondi.telldontaskkata.usecase;
 
 import it.gabrieletondi.telldontaskkata.domain.Order;
 import it.gabrieletondi.telldontaskkata.domain.OrderItem;
-import it.gabrieletondi.telldontaskkata.domain.Product;
 import it.gabrieletondi.telldontaskkata.repository.OrderRepository;
 import it.gabrieletondi.telldontaskkata.repository.ProductCatalog;
 
@@ -19,13 +18,11 @@ public class OrderCreationUseCase {
 		Order order = Order.create();
 
 		for ( SellItemRequest itemRequest : request.getRequests() ) {
-			Product product = productCatalog.getByName( itemRequest.getProductName() );
+			final OrderItem item = productCatalog.getByName( itemRequest.getProductName() )
+					.map( product -> new OrderItem( product, itemRequest.getQuantity() ) )
+					.orElseThrow( UnknownProductException::new );
 
-			if ( product == null ) {
-				throw new UnknownProductException();
-			} else {
-				order.addItem( new OrderItem( product, itemRequest.getQuantity() ) );
-			}
+			order.addItem( item );
 		}
 
 		orderRepository.save( order );
