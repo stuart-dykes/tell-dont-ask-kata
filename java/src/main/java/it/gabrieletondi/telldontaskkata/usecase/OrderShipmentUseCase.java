@@ -15,7 +15,8 @@ public class OrderShipmentUseCase {
     }
 
     public void run(OrderShipmentRequest request) {
-        final Order order = orderRepository.getById( OrderId.of( request.getOrderId() ) );
+        final Order order = orderRepository.getById( OrderId.of( request.orderId() ) )
+                .orElseThrow( UnknownOrderException::new );
 
         if ( order.canShip() ) {
             shipmentService.ship( order );

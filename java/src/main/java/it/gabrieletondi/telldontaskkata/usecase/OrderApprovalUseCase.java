@@ -20,7 +20,8 @@ public class OrderApprovalUseCase {
 	}
 
 	private void rejectOrder( final int orderId ) {
-		final Order order = orderRepository.getById( OrderId.of( orderId ) );
+		final Order order = orderRepository.getById( OrderId.of( orderId ) )
+				.orElseThrow( UnknownOrderException::new );
 		if ( order.canReject() ) {
 			order.rejected();
 			orderRepository.save( order );
@@ -30,7 +31,8 @@ public class OrderApprovalUseCase {
 	}
 
 	private void approveOrder( final int orderId ) {
-		final Order order = orderRepository.getById( OrderId.of( orderId ) );
+		final Order order = orderRepository.getById( OrderId.of( orderId ) )
+				.orElseThrow( UnknownOrderException::new );
 		if ( order.canApprove() ) {
 			order.approved();
 			orderRepository.save( order );
