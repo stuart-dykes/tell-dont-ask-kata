@@ -33,9 +33,7 @@ public class OrderCreationUseCase {
 			if ( product == null ) {
 				throw new UnknownProductException();
 			} else {
-				final OrderItem orderItem = new OrderItem( product, itemRequest.getQuantity() );
-
-				order.addItem( orderItem );
+				order.addItem( new OrderItem( product, itemRequest.getQuantity() ) );
 			}
 		}
 
