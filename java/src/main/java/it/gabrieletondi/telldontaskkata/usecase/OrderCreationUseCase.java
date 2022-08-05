@@ -17,13 +17,12 @@ public class OrderCreationUseCase {
 	public void run( SellItemsRequest request ) {
 		Order order = Order.create();
 
-		for ( SellItemRequest itemRequest : request.getRequests() ) {
-			final OrderItem item = productCatalog.getByName( itemRequest.getProductName() )
-					.map( product -> new OrderItem( product, itemRequest.getQuantity() ) )
-					.orElseThrow( UnknownProductException::new );
-
-			order.addItem( item );
-		}
+		request.getRequests()
+				.stream()
+				.map( itemRequest -> productCatalog.getByName( itemRequest.getProductName() )
+						.map( product -> new OrderItem( product, itemRequest.getQuantity() ) )
+						.orElseThrow( UnknownProductException::new ) )
+				.forEach( order::addItem );
 
 		orderRepository.save( order );
 	}
