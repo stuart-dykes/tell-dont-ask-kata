@@ -1,10 +1,10 @@
 package it.gabrieletondi.telldontaskkata.doubles;
 
-import it.gabrieletondi.telldontaskkata.domain.Order;
-import it.gabrieletondi.telldontaskkata.repository.OrderRepository;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import it.gabrieletondi.telldontaskkata.domain.Order;
+import it.gabrieletondi.telldontaskkata.repository.OrderRepository;
 
 public class TestOrderRepository implements OrderRepository {
     private Order insertedOrder;
@@ -14,6 +14,7 @@ public class TestOrderRepository implements OrderRepository {
         return insertedOrder;
     }
 
+    @Override
     public void save(Order order) {
         this.insertedOrder = order;
     }
