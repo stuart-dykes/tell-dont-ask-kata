@@ -1,13 +1,13 @@
 package it.gabrieletondi.telldontaskkata.usecase;
 
-import it.gabrieletondi.telldontaskkata.domain.Order;
-import it.gabrieletondi.telldontaskkata.domain.OrderStatus;
-import it.gabrieletondi.telldontaskkata.doubles.TestOrderRepository;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
+
+import it.gabrieletondi.telldontaskkata.domain.Order;
+import it.gabrieletondi.telldontaskkata.domain.OrderStatus;
+import it.gabrieletondi.telldontaskkata.doubles.TestOrderRepository;
 
 class OrderApprovalUseCaseTest {
 	private final TestOrderRepository orderRepository = new TestOrderRepository();
@@ -15,8 +15,7 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void approvedExistingOrder() {
-		Order initialOrder = new Order();
-		initialOrder.setStatus( OrderStatus.CREATED );
+		Order initialOrder = new Order( OrderStatus.CREATED );
 		initialOrder.setId( 1 );
 		orderRepository.addOrder( initialOrder );
 
@@ -32,8 +31,7 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void rejectedExistingOrder() {
-		Order initialOrder = new Order();
-		initialOrder.setStatus( OrderStatus.CREATED );
+		Order initialOrder = new Order( OrderStatus.CREATED );
 		initialOrder.setId( 1 );
 		orderRepository.addOrder( initialOrder );
 
@@ -49,8 +47,7 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void cannotApproveRejectedOrder() {
-		Order initialOrder = new Order();
-		initialOrder.setStatus( OrderStatus.REJECTED );
+		Order initialOrder = new Order( OrderStatus.REJECTED );
 		initialOrder.setId( 1 );
 		orderRepository.addOrder( initialOrder );
 
@@ -65,8 +62,7 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void cannotRejectApprovedOrder() {
-		Order initialOrder = new Order();
-		initialOrder.setStatus( OrderStatus.APPROVED );
+		Order initialOrder = new Order( OrderStatus.APPROVED );
 		initialOrder.setId( 1 );
 		orderRepository.addOrder( initialOrder );
 
@@ -81,8 +77,7 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void shippedOrdersCannotBeApproved() {
-		Order initialOrder = new Order();
-		initialOrder.setStatus( OrderStatus.SHIPPED );
+		Order initialOrder = new Order( OrderStatus.SHIPPED );
 		initialOrder.setId( 1 );
 		orderRepository.addOrder( initialOrder );
 
@@ -97,8 +92,7 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void shippedOrdersCannotBeRejected() {
-		Order initialOrder = new Order();
-		initialOrder.setStatus( OrderStatus.SHIPPED );
+		Order initialOrder = new Order( OrderStatus.SHIPPED );
 		initialOrder.setId( 1 );
 		orderRepository.addOrder( initialOrder );
 

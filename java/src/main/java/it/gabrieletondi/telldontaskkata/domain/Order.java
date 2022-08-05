@@ -22,44 +22,28 @@ public class Order {
     private OrderStatus status;
     private int id;
 
-    public BigDecimal getTotal() {
-        return total;
+    public Order( final OrderStatus status ) {
+        this.status = status;
     }
 
-    public void setTotal(BigDecimal total) {
-        this.total = total;
+    public BigDecimal getTotal() {
+        return total;
     }
 
     public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
     public List<OrderItem> getItems() {
         return items;
-    }
-
-    public void setItems(List<OrderItem> items) {
-        this.items = items;
     }
 
     public BigDecimal getTax() {
         return tax;
     }
 
-    public void setTax(BigDecimal tax) {
-        this.tax = tax;
-    }
-
     public OrderStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(OrderStatus status) {
-        this.status = status;
     }
 
     public int getId() {
@@ -70,20 +54,19 @@ public class Order {
         this.id = id;
     }
 
-    public void addItem( final OrderItem item ) {
-        items.add( item );
-        setTotal( getTotal().add( item.getTaxedAmount() ) );
-        setTax( getTax().add( item.getTax() ) );
+    public static Order create() {
+        final Order order = new Order( OrderStatus.CREATED );
+        order.items = new ArrayList<>();
+        order.currency = "EUR";
+        order.total = new BigDecimal( "0.00" );
+        order.tax = new BigDecimal( "0.00" );
+        return order;
     }
 
-    public static Order create() {
-        final Order order = new Order();
-        order.setStatus( OrderStatus.CREATED );
-        order.setItems( new ArrayList<>() );
-        order.setCurrency( "EUR" );
-        order.setTotal( new BigDecimal( "0.00" ) );
-        order.setTax( new BigDecimal( "0.00" ) );
-        return order;
+    public void addItem( final OrderItem item ) {
+        items.add( item );
+        this.total = getTotal().add( item.getTaxedAmount() );
+        this.tax = getTax().add( item.getTax() );
     }
 
     public void approved() {
@@ -94,7 +77,7 @@ public class Order {
         if ( getStatus().equals( OrderStatus.REJECTED ) ) {
             throw new RejectedOrderCannotBeApprovedException();
         }
-        setStatus( OrderStatus.APPROVED );
+        this.status = OrderStatus.APPROVED;
     }
 
     public void rejected() {
@@ -104,7 +87,7 @@ public class Order {
         if ( getStatus().equals( OrderStatus.APPROVED ) ) {
             throw new ApprovedOrderCannotBeRejectedException();
         }
-        setStatus( OrderStatus.REJECTED );
+        this.status = OrderStatus.REJECTED;
     }
 
     public void shipped() {
@@ -115,6 +98,6 @@ public class Order {
         if ( getStatus().equals( SHIPPED ) ) {
             throw new OrderCannotBeShippedTwiceException();
         }
-        setStatus( OrderStatus.SHIPPED );
+        this.status = OrderStatus.SHIPPED;
     }
 }

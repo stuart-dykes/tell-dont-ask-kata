@@ -1,14 +1,14 @@
 package it.gabrieletondi.telldontaskkata.usecase;
 
-import it.gabrieletondi.telldontaskkata.domain.Order;
-import it.gabrieletondi.telldontaskkata.domain.OrderStatus;
-import it.gabrieletondi.telldontaskkata.doubles.TestOrderRepository;
-import it.gabrieletondi.telldontaskkata.doubles.TestShipmentService;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
+
+import it.gabrieletondi.telldontaskkata.domain.Order;
+import it.gabrieletondi.telldontaskkata.domain.OrderStatus;
+import it.gabrieletondi.telldontaskkata.doubles.TestOrderRepository;
+import it.gabrieletondi.telldontaskkata.doubles.TestShipmentService;
 
 class OrderShipmentUseCaseTest {
 	private final TestOrderRepository orderRepository = new TestOrderRepository();
@@ -18,9 +18,8 @@ class OrderShipmentUseCaseTest {
 
 	@Test
 	void shipApprovedOrder() {
-		Order initialOrder = new Order();
+		Order initialOrder = new Order( OrderStatus.APPROVED );
 		initialOrder.setId( 1 );
-		initialOrder.setStatus( OrderStatus.APPROVED );
 		orderRepository.addOrder( initialOrder );
 
 		OrderShipmentRequest request = new OrderShipmentRequest();
@@ -34,9 +33,8 @@ class OrderShipmentUseCaseTest {
 
 	@Test
 	void createdOrdersCannotBeShipped() {
-		Order initialOrder = new Order();
+		Order initialOrder = new Order( OrderStatus.CREATED );
 		initialOrder.setId( 1 );
-		initialOrder.setStatus( OrderStatus.CREATED );
 		orderRepository.addOrder( initialOrder );
 
 		OrderShipmentRequest request = new OrderShipmentRequest();
@@ -51,9 +49,8 @@ class OrderShipmentUseCaseTest {
 
 	@Test
 	void rejectedOrdersCannotBeShipped() {
-		Order initialOrder = new Order();
+		Order initialOrder = new Order( OrderStatus.REJECTED );
 		initialOrder.setId( 1 );
-		initialOrder.setStatus( OrderStatus.REJECTED );
 		orderRepository.addOrder( initialOrder );
 
 		OrderShipmentRequest request = new OrderShipmentRequest();
@@ -67,9 +64,8 @@ class OrderShipmentUseCaseTest {
 
 	@Test
 	void shippedOrdersCannotBeShippedAgain() {
-		Order initialOrder = new Order();
+		Order initialOrder = new Order( OrderStatus.SHIPPED );
 		initialOrder.setId( 1 );
-		initialOrder.setStatus( OrderStatus.SHIPPED );
 		orderRepository.addOrder( initialOrder );
 
 		OrderShipmentRequest request = new OrderShipmentRequest();
