@@ -17,6 +17,8 @@ import it.gabrieletondi.telldontaskkata.usecase.RejectedOrderCannotBeApprovedExc
 import it.gabrieletondi.telldontaskkata.usecase.ShippedOrdersCannotBeChangedException;
 
 public class Order {
+	private static final String EUR = "EUR";
+
 	private int id;
 	private OrderStatus status = CREATED;
 	private final List<OrderItem> items;
@@ -44,7 +46,7 @@ public class Order {
 	}
 
 	public String getCurrency() {
-		return "EUR";
+		return EUR;
 	}
 
 	public BigDecimal getTotal() {
@@ -56,10 +58,6 @@ public class Order {
 
 	public BigDecimal getTax() {
 		return items.stream().map( OrderItem::getTax ).reduce( BigDecimal::add ).orElse( ZERO );
-	}
-
-	public void setId( int id ) {
-		this.id = id;
 	}
 
 	public void approved() {
