@@ -21,12 +21,14 @@ public class Order {
 	private OrderStatus status = CREATED;
 	private final List<OrderItem> items;
 
-	public Order() {
-		items = new ArrayList<>();
-	}
-
 	public Order( final List<OrderItem> items ) {
 		this.items = items;
+	}
+
+	public Order( final int id, final OrderStatus status ) {
+		this.id = id;
+		this.status = status;
+		this.items = new ArrayList<>();
 	}
 
 	public int getId() {
