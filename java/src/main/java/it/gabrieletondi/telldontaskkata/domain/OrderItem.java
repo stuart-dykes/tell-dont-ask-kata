@@ -13,6 +13,8 @@ public class OrderItem {
     public OrderItem( final Product product, final int quantity ) {
         this.product = product;
         this.quantity = quantity;
+        updateTax( product, quantity );
+        updateTaxedAmount( product, quantity );
     }
 
     public Product getProduct() {
