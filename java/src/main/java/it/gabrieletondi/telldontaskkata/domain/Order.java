@@ -54,7 +54,7 @@ public class Order {
 		return items.stream().map( OrderItem::getTax ).reduce( BigDecimal::add ).orElse( ZERO );
 	}
 
-	public void approved() {
+	public void setApproved() {
 		if ( getStatus().equals( OrderStatus.SHIPPED ) ) {
 			throw new ShippedOrdersCannotBeChangedException();
 		}
@@ -65,7 +65,7 @@ public class Order {
 		this.status = OrderStatus.APPROVED;
 	}
 
-	public void rejected() {
+	public void setRejected() {
 		if ( getStatus().equals( OrderStatus.SHIPPED ) ) {
 			throw new ShippedOrdersCannotBeChangedException();
 		}
@@ -75,7 +75,7 @@ public class Order {
 		this.status = OrderStatus.REJECTED;
 	}
 
-	public void shipped() {
+	public void setShipped() {
 		if ( getStatus().equals( CREATED ) || getStatus().equals( REJECTED ) ) {
 			throw new OrderCannotBeShippedException();
 		}

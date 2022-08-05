@@ -14,9 +14,9 @@ public class OrderApprovalUseCase {
         final Order order = orderRepository.getById( request.getOrderId() );
 
         if ( request.isApproved() ) {
-            order.approved();
+            order.setApproved();
         } else {
-            order.rejected();
+            order.setRejected();
         }
 
         orderRepository.save( order );
