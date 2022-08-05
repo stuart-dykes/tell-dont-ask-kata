@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -32,10 +32,8 @@ class OrderCreationUseCaseTest {
 		SellItemRequest saladRequest = new SellItemRequest( "salad", 2 );
 		SellItemRequest tomatoRequest = new SellItemRequest( "tomato", 3 );
 
-		final SellItemsRequest request = new SellItemsRequest();
-		request.setRequests( new ArrayList<>() );
-		request.getRequests().add( saladRequest );
-		request.getRequests().add( tomatoRequest );
+		final SellItemsRequest request = new SellItemsRequest(
+				List.of( saladRequest, tomatoRequest ) );
 
 		useCase.run( request );
 
@@ -66,10 +64,8 @@ class OrderCreationUseCaseTest {
 
 	@Test
 	void unknownProduct() {
-		SellItemsRequest request = new SellItemsRequest();
-		request.setRequests( new ArrayList<>() );
-		SellItemRequest unknownProductRequest = new SellItemRequest( "unknown product", 1 );
-		request.getRequests().add( unknownProductRequest );
+		SellItemsRequest request = new SellItemsRequest(
+				List.of( new SellItemRequest( "unknown product", 1 ) ) );
 
 		assertThatThrownBy( () -> useCase.run( request ) ).isExactlyInstanceOf(
 				UnknownProductException.class );

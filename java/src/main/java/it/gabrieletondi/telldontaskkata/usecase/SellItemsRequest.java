@@ -2,14 +2,13 @@ package it.gabrieletondi.telldontaskkata.usecase;
 
 import java.util.List;
 
-public class SellItemsRequest {
-    private List<SellItemRequest> requests;
+public record SellItemsRequest(List<SellItemRequest> requests) {
 
-    public void setRequests(List<SellItemRequest> requests) {
-        this.requests = requests;
-    }
+	public SellItemsRequest( final List<SellItemRequest> requests ) {
+		this.requests = List.copyOf( requests );
+	}
 
-    public List<SellItemRequest> getRequests() {
-        return requests;
-    }
+	public List<SellItemRequest> getRequests() {
+		return requests;
+	}
 }
