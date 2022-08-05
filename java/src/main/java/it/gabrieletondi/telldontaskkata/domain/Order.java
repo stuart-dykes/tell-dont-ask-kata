@@ -1,10 +1,16 @@
 package it.gabrieletondi.telldontaskkata.domain;
 
+import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.CREATED;
+import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.REJECTED;
+import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.SHIPPED;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import it.gabrieletondi.telldontaskkata.usecase.ApprovedOrderCannotBeRejectedException;
+import it.gabrieletondi.telldontaskkata.usecase.OrderCannotBeShippedException;
+import it.gabrieletondi.telldontaskkata.usecase.OrderCannotBeShippedTwiceException;
 import it.gabrieletondi.telldontaskkata.usecase.RejectedOrderCannotBeApprovedException;
 import it.gabrieletondi.telldontaskkata.usecase.ShippedOrdersCannotBeChangedException;
 
@@ -80,7 +86,7 @@ public class Order {
         return order;
     }
 
-    public void approve() {
+    public void approved() {
         if ( getStatus().equals( OrderStatus.SHIPPED ) ) {
             throw new ShippedOrdersCannotBeChangedException();
         }
@@ -91,7 +97,7 @@ public class Order {
         setStatus( OrderStatus.APPROVED );
     }
 
-    public void reject() {
+    public void rejected() {
         if ( getStatus().equals( OrderStatus.SHIPPED ) ) {
             throw new ShippedOrdersCannotBeChangedException();
         }
@@ -99,5 +105,16 @@ public class Order {
             throw new ApprovedOrderCannotBeRejectedException();
         }
         setStatus( OrderStatus.REJECTED );
+    }
+
+    public void shipped() {
+        if ( getStatus().equals( CREATED ) || getStatus().equals( REJECTED ) ) {
+            throw new OrderCannotBeShippedException();
+        }
+
+        if ( getStatus().equals( SHIPPED ) ) {
+            throw new OrderCannotBeShippedTwiceException();
+        }
+        setStatus( OrderStatus.SHIPPED );
     }
 }
