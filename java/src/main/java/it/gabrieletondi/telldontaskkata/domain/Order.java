@@ -60,10 +60,6 @@ public class Order {
 		this.id = id;
 	}
 
-	public void addItem( final OrderItem item ) {
-		items.add( item );
-	}
-
 	public void approved() {
 		if ( getStatus().equals( OrderStatus.SHIPPED ) ) {
 			throw new ShippedOrdersCannotBeChangedException();
