@@ -10,71 +10,75 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
 
-public class OrderShipmentUseCaseTest {
-    private final TestOrderRepository orderRepository = new TestOrderRepository();
-    private final TestShipmentService shipmentService = new TestShipmentService();
-    private final OrderShipmentUseCase useCase = new OrderShipmentUseCase(orderRepository, shipmentService);
+class OrderShipmentUseCaseTest {
+	private final TestOrderRepository orderRepository = new TestOrderRepository();
+	private final TestShipmentService shipmentService = new TestShipmentService();
+	private final OrderShipmentUseCase useCase = new OrderShipmentUseCase( orderRepository,
+			shipmentService );
 
-    @Test
-    public void shipApprovedOrder() {
-        Order initialOrder = new Order();
-        initialOrder.setId(1);
-        initialOrder.setStatus(OrderStatus.APPROVED);
-        orderRepository.addOrder(initialOrder);
+	@Test
+	void shipApprovedOrder() {
+		Order initialOrder = new Order();
+		initialOrder.setId( 1 );
+		initialOrder.setStatus( OrderStatus.APPROVED );
+		orderRepository.addOrder( initialOrder );
 
-        OrderShipmentRequest request = new OrderShipmentRequest();
-        request.setOrderId(1);
+		OrderShipmentRequest request = new OrderShipmentRequest();
+		request.setOrderId( 1 );
 
-        useCase.run(request);
+		useCase.run( request );
 
-        assertThat(orderRepository.getSavedOrder().getStatus()).isEqualTo(OrderStatus.SHIPPED);
-        assertThat(shipmentService.getShippedOrder()).isEqualTo(initialOrder);
-    }
+		assertThat( orderRepository.getSavedOrder().getStatus() ).isEqualTo( OrderStatus.SHIPPED );
+		assertThat( shipmentService.getShippedOrder() ).isEqualTo( initialOrder );
+	}
 
-    @Test
-    public void createdOrdersCannotBeShipped() {
-        Order initialOrder = new Order();
-        initialOrder.setId(1);
-        initialOrder.setStatus(OrderStatus.CREATED);
-        orderRepository.addOrder(initialOrder);
+	@Test
+	void createdOrdersCannotBeShipped() {
+		Order initialOrder = new Order();
+		initialOrder.setId( 1 );
+		initialOrder.setStatus( OrderStatus.CREATED );
+		orderRepository.addOrder( initialOrder );
 
-        OrderShipmentRequest request = new OrderShipmentRequest();
-        request.setOrderId(1);
+		OrderShipmentRequest request = new OrderShipmentRequest();
+		request.setOrderId( 1 );
 
-        assertThatThrownBy(() -> useCase.run(request)).isExactlyInstanceOf(OrderCannotBeShippedException.class);
+		assertThatThrownBy( () -> useCase.run( request ) ).isExactlyInstanceOf(
+				OrderCannotBeShippedException.class );
 
-        assertThat(orderRepository.getSavedOrder()).isNull();
-        assertThat(shipmentService.getShippedOrder()).isNull();
-    }
+		assertThat( orderRepository.getSavedOrder() ).isNull();
+		assertThat( shipmentService.getShippedOrder() ).isNull();
+	}
 
-    @Test
-    public void rejectedOrdersCannotBeShipped() {
-        Order initialOrder = new Order();
-        initialOrder.setId(1);
-        initialOrder.setStatus(OrderStatus.REJECTED);
-        orderRepository.addOrder(initialOrder);
+	@Test
+	void rejectedOrdersCannotBeShipped() {
+		Order initialOrder = new Order();
+		initialOrder.setId( 1 );
+		initialOrder.setStatus( OrderStatus.REJECTED );
+		orderRepository.addOrder( initialOrder );
 
-        OrderShipmentRequest request = new OrderShipmentRequest();
-        request.setOrderId(1);
+		OrderShipmentRequest request = new OrderShipmentRequest();
+		request.setOrderId( 1 );
 
-        assertThatThrownBy(() -> useCase.run(request)).isExactlyInstanceOf(OrderCannotBeShippedException.class);
-        assertThat(orderRepository.getSavedOrder()).isNull();
-        assertThat(shipmentService.getShippedOrder()).isNull();
-    }
+		assertThatThrownBy( () -> useCase.run( request ) ).isExactlyInstanceOf(
+				OrderCannotBeShippedException.class );
+		assertThat( orderRepository.getSavedOrder() ).isNull();
+		assertThat( shipmentService.getShippedOrder() ).isNull();
+	}
 
-    @Test
-    public void shippedOrdersCannotBeShippedAgain() {
-        Order initialOrder = new Order();
-        initialOrder.setId(1);
-        initialOrder.setStatus(OrderStatus.SHIPPED);
-        orderRepository.addOrder(initialOrder);
+	@Test
+	void shippedOrdersCannotBeShippedAgain() {
+		Order initialOrder = new Order();
+		initialOrder.setId( 1 );
+		initialOrder.setStatus( OrderStatus.SHIPPED );
+		orderRepository.addOrder( initialOrder );
 
-        OrderShipmentRequest request = new OrderShipmentRequest();
-        request.setOrderId(1);
+		OrderShipmentRequest request = new OrderShipmentRequest();
+		request.setOrderId( 1 );
 
-        assertThatThrownBy(() -> useCase.run(request)).isExactlyInstanceOf(OrderCannotBeShippedTwiceException.class);
+		assertThatThrownBy( () -> useCase.run( request ) ).isExactlyInstanceOf(
+				OrderCannotBeShippedTwiceException.class );
 
-        assertThat(orderRepository.getSavedOrder()).isNull();
-        assertThat(shipmentService.getShippedOrder()).isNull();
-    }
+		assertThat( orderRepository.getSavedOrder() ).isNull();
+		assertThat( shipmentService.getShippedOrder() ).isNull();
+	}
 }
