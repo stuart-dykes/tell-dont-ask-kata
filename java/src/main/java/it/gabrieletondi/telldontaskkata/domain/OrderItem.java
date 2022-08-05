@@ -44,4 +44,9 @@ public class OrderItem {
         setTaxedAmount( unitaryTaxedAmount.multiply( BigDecimal.valueOf( quantity ) )
                 .setScale( 2, HALF_UP ) );
     }
+
+    public void updateTax( final Product product, final int quantity ) {
+        final BigDecimal unitaryTax = product.getUnitaryTax();
+        setTax( unitaryTax.multiply( BigDecimal.valueOf( quantity ) ) );
+    }
 }
