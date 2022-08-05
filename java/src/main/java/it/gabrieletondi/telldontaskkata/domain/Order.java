@@ -61,5 +61,7 @@ public class Order {
 
     public void addItem( final OrderItem item ) {
         items.add( item );
+        setTotal( getTotal().add( item.getTaxedAmount() ) );
+        setTax( getTax().add( item.getTax() ) );
     }
 }

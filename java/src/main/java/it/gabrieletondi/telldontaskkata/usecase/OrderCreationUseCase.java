@@ -50,8 +50,6 @@ public class OrderCreationUseCase {
                 orderItem.setTaxedAmount( taxedAmount );
 
                 order.addItem( orderItem );
-                order.setTotal( order.getTotal().add( orderItem.getTaxedAmount() ) );
-                order.setTax( order.getTax().add( orderItem.getTax() ) );
             }
         }
 
