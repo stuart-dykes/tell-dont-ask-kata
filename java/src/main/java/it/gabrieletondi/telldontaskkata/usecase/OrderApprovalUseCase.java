@@ -4,22 +4,38 @@ import it.gabrieletondi.telldontaskkata.domain.Order;
 import it.gabrieletondi.telldontaskkata.repository.OrderRepository;
 
 public class OrderApprovalUseCase {
-    private final OrderRepository orderRepository;
+	private final OrderRepository orderRepository;
 
-    public OrderApprovalUseCase(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
-    }
+	public OrderApprovalUseCase( OrderRepository orderRepository ) {
+		this.orderRepository = orderRepository;
+	}
 
-    public void run(OrderApprovalRequest request) {
-        final Order order = orderRepository.getById( request.getOrderId() );
+	public void run( OrderApprovalRequest request ) {
+		if ( request.isApproved() ) {
+			approveOrder( request.getOrderId() );
+		} else {
+			rejectOrder( request.getOrderId() );
+		}
+	}
 
-        if ( request.isApproved() ) {
-            order.setApproved();
-        } else {
-            order.setRejected();
-        }
+	private void rejectOrder( final int orderId ) {
+		final Order order = orderRepository.getById( orderId );
+		if ( order.canReject() ) {
+			order.setRejected();
+			orderRepository.save( order );
+		} else {
+			throw new IllegalOperationException();
+		}
+	}
 
-        orderRepository.save( order );
-    }
+	private void approveOrder( final int orderId ) {
+		final Order order = orderRepository.getById( orderId );
+		if ( order.canApprove() ) {
+			order.approved();
+			orderRepository.save( order );
+		} else {
+			throw new IllegalOperationException();
+		}
+	}
 
 }

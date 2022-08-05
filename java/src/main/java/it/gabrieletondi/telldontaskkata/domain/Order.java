@@ -2,9 +2,8 @@ package it.gabrieletondi.telldontaskkata.domain;
 
 import static java.math.BigDecimal.ZERO;
 
+import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.APPROVED;
 import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.CREATED;
-import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.REJECTED;
-import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.SHIPPED;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -54,34 +53,35 @@ public class Order {
 		return items.stream().map( OrderItem::getTax ).reduce( BigDecimal::add ).orElse( ZERO );
 	}
 
-	public void setApproved() {
-		if ( getStatus().equals( OrderStatus.SHIPPED ) ) {
-			throw new ShippedOrdersCannotBeChangedException();
-		}
+	public boolean canApprove() {
+		return this.status == CREATED;
+	}
 
-		if ( getStatus().equals( OrderStatus.REJECTED ) ) {
-			throw new RejectedOrderCannotBeApprovedException();
+	public void approved() {
+		if ( !canApprove() ) {
+			throw new IllegalStateException();
 		}
 		this.status = OrderStatus.APPROVED;
 	}
 
+	public boolean canReject() {
+		return this.status == CREATED;
+	}
+
 	public void setRejected() {
-		if ( getStatus().equals( OrderStatus.SHIPPED ) ) {
-			throw new ShippedOrdersCannotBeChangedException();
-		}
-		if ( getStatus().equals( OrderStatus.APPROVED ) ) {
-			throw new ApprovedOrderCannotBeRejectedException();
+		if ( !canReject() ) {
+			throw new IllegalStateException();
 		}
 		this.status = OrderStatus.REJECTED;
 	}
 
-	public void setShipped() {
-		if ( getStatus().equals( CREATED ) || getStatus().equals( REJECTED ) ) {
-			throw new OrderCannotBeShippedException();
-		}
+	public boolean canShip() {
+		return this.status == APPROVED;
+	}
 
-		if ( getStatus().equals( SHIPPED ) ) {
-			throw new OrderCannotBeShippedTwiceException();
+	public void setShipped() {
+		if ( !canShip() ) {
+			throw new IllegalStateException();
 		}
 		this.status = OrderStatus.SHIPPED;
 	}

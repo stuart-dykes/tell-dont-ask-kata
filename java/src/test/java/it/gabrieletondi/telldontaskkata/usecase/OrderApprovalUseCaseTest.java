@@ -10,10 +10,7 @@ import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.SHIPPED;
 
 import org.junit.jupiter.api.Test;
 
-import it.gabrieletondi.telldontaskkata.domain.ApprovedOrderCannotBeRejectedException;
 import it.gabrieletondi.telldontaskkata.domain.Order;
-import it.gabrieletondi.telldontaskkata.domain.RejectedOrderCannotBeApprovedException;
-import it.gabrieletondi.telldontaskkata.domain.ShippedOrdersCannotBeChangedException;
 import it.gabrieletondi.telldontaskkata.doubles.TestOrderRepository;
 
 class OrderApprovalUseCaseTest {
@@ -54,7 +51,7 @@ class OrderApprovalUseCaseTest {
 		OrderApprovalRequest request = new OrderApprovalRequest( 1, true );
 
 		assertThatThrownBy( () -> useCase.run( request ) ).isExactlyInstanceOf(
-				RejectedOrderCannotBeApprovedException.class );
+				IllegalOperationException.class );
 		assertThat( orderRepository.getSavedOrder() ).isNull();
 	}
 
@@ -66,7 +63,7 @@ class OrderApprovalUseCaseTest {
 		OrderApprovalRequest request = new OrderApprovalRequest( 1, false );
 
 		assertThatThrownBy( () -> useCase.run( request ) ).isExactlyInstanceOf(
-				ApprovedOrderCannotBeRejectedException.class );
+				IllegalOperationException.class );
 		assertThat( orderRepository.getSavedOrder() ).isNull();
 	}
 
@@ -78,7 +75,7 @@ class OrderApprovalUseCaseTest {
 		OrderApprovalRequest request = new OrderApprovalRequest( 1, true );
 
 		assertThatThrownBy( () -> useCase.run( request ) ).isExactlyInstanceOf(
-				ShippedOrdersCannotBeChangedException.class );
+				IllegalOperationException.class );
 		assertThat( orderRepository.getSavedOrder() ).isNull();
 	}
 
@@ -90,7 +87,7 @@ class OrderApprovalUseCaseTest {
 		OrderApprovalRequest request = new OrderApprovalRequest( 1, false );
 
 		assertThatThrownBy( () -> useCase.run( request ) ).isExactlyInstanceOf(
-				ShippedOrdersCannotBeChangedException.class );
+				IllegalOperationException.class );
 		assertThat( orderRepository.getSavedOrder() ).isNull();
 	}
 }

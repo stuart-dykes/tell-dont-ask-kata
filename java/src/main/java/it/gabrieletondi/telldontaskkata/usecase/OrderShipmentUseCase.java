@@ -14,10 +14,14 @@ public class OrderShipmentUseCase {
     }
 
     public void run(OrderShipmentRequest request) {
-        final Order order = orderRepository.getById(request.getOrderId());
-        order.setShipped();
+        final Order order = orderRepository.getById( request.getOrderId() );
 
-        shipmentService.ship(order);
-        orderRepository.save(order);
+        if ( order.canShip() ) {
+            shipmentService.ship( order );
+            order.setShipped();
+        } else {
+            throw new IllegalOperationException();
+        }
+        orderRepository.save( order );
     }
 }
