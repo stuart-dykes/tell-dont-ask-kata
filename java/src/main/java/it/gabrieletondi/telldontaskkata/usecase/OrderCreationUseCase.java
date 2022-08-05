@@ -1,7 +1,5 @@
 package it.gabrieletondi.telldontaskkata.usecase;
 
-import static java.math.RoundingMode.HALF_UP;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
@@ -38,7 +36,7 @@ public class OrderCreationUseCase {
 				final OrderItem orderItem = new OrderItem( product, itemRequest.getQuantity() );
 
 				updateTax( product, orderItem, itemRequest.getQuantity() );
-				updateTaxedAmount( product, orderItem, itemRequest.getQuantity() );
+				orderItem.updateTaxedAmount( product, itemRequest.getQuantity() );
 
 				order.addItem( orderItem );
 			}
@@ -47,18 +45,8 @@ public class OrderCreationUseCase {
 		orderRepository.save( order );
 	}
 
-	private void updateTaxedAmount( final Product product, final OrderItem orderItem,
-			final int quantity ) {
-		orderItem.setTaxedAmount( getTaxedAmount( product, quantity ) );
-	}
-
 	private void updateTax( final Product product, final OrderItem orderItem, final int quantity ) {
 		orderItem.setTax( getTaxAmount( product, quantity ) );
-	}
-
-	private BigDecimal getTaxedAmount( final Product product, final int quantity ) {
-		final BigDecimal unitaryTaxedAmount = product.getUnitaryTaxedAmount();
-		return unitaryTaxedAmount.multiply( BigDecimal.valueOf( quantity ) ).setScale( 2, HALF_UP );
 	}
 
 	private BigDecimal getTaxAmount( final Product product, final int quantity ) {

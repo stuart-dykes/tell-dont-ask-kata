@@ -1,5 +1,7 @@
 package it.gabrieletondi.telldontaskkata.domain;
 
+import static java.math.RoundingMode.HALF_UP;
+
 import java.math.BigDecimal;
 
 public class OrderItem {
@@ -33,7 +35,13 @@ public class OrderItem {
         return tax;
     }
 
-    public void setTax(BigDecimal tax) {
+    public void setTax( BigDecimal tax ) {
         this.tax = tax;
+    }
+
+    public void updateTaxedAmount( final Product product, final int quantity ) {
+        final BigDecimal unitaryTaxedAmount = product.getUnitaryTaxedAmount();
+        setTaxedAmount( unitaryTaxedAmount.multiply( BigDecimal.valueOf( quantity ) )
+                .setScale( 2, HALF_UP ) );
     }
 }
