@@ -10,17 +10,13 @@ public class Order {
 	private static final String EUR = "EUR";
 
 	private int id;
-	private OrderState state = new CreatedOrderState();
+	private OrderState state;
 	private final List<OrderItem> items;
 
-	private Order( final List<OrderItem> items ) {
-		this.items = items;
-	}
-
-	private Order( final int id, final OrderState state ) {
+	private Order( final int id, final OrderState state, final List<OrderItem> items ) {
 		this.id = id;
 		this.state = state;
-		this.items = new ArrayList<>();
+		this.items = items;
 	}
 
 	public int getId() {
@@ -79,22 +75,22 @@ public class Order {
 	}
 
 	public static Order create( final List<OrderItem> items ) {
-		return new Order( items );
+		return new Order( -1, new CreatedOrderState(), items );
 	}
 
 	public static Order loadCreated( final int id ) {
-		return new Order( id, new CreatedOrderState() );
+		return new Order( id, new CreatedOrderState(), new ArrayList<>() );
 	}
 
 	public static Order loadApproved( final int id ) {
-		return new Order( id, new ApprovedOrderState() );
+		return new Order( id, new ApprovedOrderState(), new ArrayList<>() );
 	}
 
 	public static Order loadRejected( final int id ) {
-		return new Order( id, new RejectedOrderState() );
+		return new Order( id, new RejectedOrderState(), new ArrayList<>() );
 	}
 
 	public static Order loadShipped( final int id ) {
-		return new Order( id, new ShippedOrderState() );
+		return new Order( id, new ShippedOrderState(), new ArrayList<>() );
 	}
 }
