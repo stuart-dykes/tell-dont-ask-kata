@@ -19,7 +19,15 @@ import it.gabrieletondi.telldontaskkata.usecase.ShippedOrdersCannotBeChangedExce
 public class Order {
 	private int id;
 	private OrderStatus status = CREATED;
-	private final List<OrderItem> items = new ArrayList<>();
+	private final List<OrderItem> items;
+
+	public Order() {
+		items = new ArrayList<>();
+	}
+
+	public Order( final List<OrderItem> items ) {
+		this.items = items;
+	}
 
 	public int getId() {
 		return id;

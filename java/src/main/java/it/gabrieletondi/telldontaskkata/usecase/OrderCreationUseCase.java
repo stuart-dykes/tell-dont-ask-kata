@@ -1,5 +1,7 @@
 package it.gabrieletondi.telldontaskkata.usecase;
 
+import java.util.List;
+
 import it.gabrieletondi.telldontaskkata.domain.Order;
 import it.gabrieletondi.telldontaskkata.domain.OrderItem;
 import it.gabrieletondi.telldontaskkata.repository.OrderRepository;
@@ -15,16 +17,15 @@ public class OrderCreationUseCase {
 	}
 
 	public void run( SellItemsRequest request ) {
-		Order order = new Order();
 
-		request.getRequests()
+		final List<OrderItem> items = request.getRequests()
 				.stream()
 				.map( itemRequest -> productCatalog.getByName( itemRequest.getProductName() )
 						.map( product -> new OrderItem( product, itemRequest.getQuantity() ) )
 						.orElseThrow( UnknownProductException::new ) )
-				.forEach( order::addItem );
+				.toList();
 
-		orderRepository.save( order );
+		orderRepository.save( new Order( items ) );
 	}
 
 }
