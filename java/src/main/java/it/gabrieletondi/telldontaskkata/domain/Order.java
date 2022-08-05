@@ -2,9 +2,6 @@ package it.gabrieletondi.telldontaskkata.domain;
 
 import static java.math.BigDecimal.ZERO;
 
-import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.APPROVED;
-import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.CREATED;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,16 +10,16 @@ public class Order {
 	private static final String EUR = "EUR";
 
 	private int id;
-	private OrderStatus status = CREATED;
+	private OrderState state = new CreatedOrderState();
 	private final List<OrderItem> items;
 
-	public Order( final List<OrderItem> items ) {
+	private Order( final List<OrderItem> items ) {
 		this.items = items;
 	}
 
-	public Order( final int id, final OrderStatus status ) {
+	private Order( final int id, final OrderState state ) {
 		this.id = id;
-		this.status = status;
+		this.state = state;
 		this.items = new ArrayList<>();
 	}
 
@@ -31,7 +28,7 @@ public class Order {
 	}
 
 	public OrderStatus getStatus() {
-		return status;
+		return state.getStatus();
 	}
 
 	public List<OrderItem> getItems() {
@@ -53,36 +50,51 @@ public class Order {
 		return items.stream().map( OrderItem::getTax ).reduce( BigDecimal::add ).orElse( ZERO );
 	}
 
+	void changeState( final OrderState state ) {
+		this.state = state;
+	}
+
 	public boolean canApprove() {
-		return this.status == CREATED;
+		return this.state.canApprove();
 	}
 
 	public void approved() {
-		if ( !canApprove() ) {
-			throw new IllegalStateException();
-		}
-		this.status = OrderStatus.APPROVED;
+		this.state.approved( this );
 	}
 
 	public boolean canReject() {
-		return this.status == CREATED;
+		return this.state.canReject();
 	}
 
 	public void rejected() {
-		if ( !canReject() ) {
-			throw new IllegalStateException();
-		}
-		this.status = OrderStatus.REJECTED;
+		this.state.rejected( this );
 	}
 
 	public boolean canShip() {
-		return this.status == APPROVED;
+		return this.state.canShip();
 	}
 
 	public void shipped() {
-		if ( !canShip() ) {
-			throw new IllegalStateException();
-		}
-		this.status = OrderStatus.SHIPPED;
+		this.state.shipped( this );
+	}
+
+	public static Order create( final List<OrderItem> items ) {
+		return new Order( items );
+	}
+
+	public static Order loadCreated( final int id ) {
+		return new Order( id, new CreatedOrderState() );
+	}
+
+	public static Order loadApproved( final int id ) {
+		return new Order( id, new ApprovedOrderState() );
+	}
+
+	public static Order loadRejected( final int id ) {
+		return new Order( id, new RejectedOrderState() );
+	}
+
+	public static Order loadShipped( final int id ) {
+		return new Order( id, new ShippedOrderState() );
 	}
 }

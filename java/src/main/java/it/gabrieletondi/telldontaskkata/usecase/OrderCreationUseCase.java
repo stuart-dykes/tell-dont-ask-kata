@@ -25,7 +25,7 @@ public class OrderCreationUseCase {
 						.orElseThrow( UnknownProductException::new ) )
 				.toList();
 
-		orderRepository.save( new Order( items ) );
+		orderRepository.save( Order.create( items ) );
 	}
 
 }

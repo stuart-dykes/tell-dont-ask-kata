@@ -4,9 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.APPROVED;
-import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.CREATED;
 import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.REJECTED;
-import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.SHIPPED;
 
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +17,7 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void approvedExistingOrder() {
-		Order initialOrder = new Order( 1, CREATED );
+		Order initialOrder = Order.loadCreated( 1 );
 		orderRepository.addOrder( initialOrder );
 
 		OrderApprovalRequest request = new OrderApprovalRequest( 1, true );
@@ -32,7 +30,7 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void rejectedExistingOrder() {
-		Order initialOrder = new Order( 1, CREATED );
+		Order initialOrder = Order.loadCreated( 1 );
 		orderRepository.addOrder( initialOrder );
 
 		OrderApprovalRequest request = new OrderApprovalRequest( 1, false );
@@ -45,7 +43,7 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void cannotApproveRejectedOrder() {
-		Order initialOrder = new Order( 1, REJECTED );
+		Order initialOrder = Order.loadRejected( 1 );
 		orderRepository.addOrder( initialOrder );
 
 		OrderApprovalRequest request = new OrderApprovalRequest( 1, true );
@@ -57,7 +55,7 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void cannotRejectApprovedOrder() {
-		Order initialOrder = new Order( 1, APPROVED );
+		Order initialOrder = Order.loadApproved( 1 );
 		orderRepository.addOrder( initialOrder );
 
 		OrderApprovalRequest request = new OrderApprovalRequest( 1, false );
@@ -69,7 +67,7 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void shippedOrdersCannotBeApproved() {
-		Order initialOrder = new Order( 1, SHIPPED );
+		Order initialOrder = Order.loadShipped( 1 );
 		orderRepository.addOrder( initialOrder );
 
 		OrderApprovalRequest request = new OrderApprovalRequest( 1, true );
@@ -81,7 +79,7 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void shippedOrdersCannotBeRejected() {
-		Order initialOrder = new Order( 1, SHIPPED );
+		Order initialOrder = Order.loadShipped( 1 );
 		orderRepository.addOrder( initialOrder );
 
 		OrderApprovalRequest request = new OrderApprovalRequest( 1, false );
