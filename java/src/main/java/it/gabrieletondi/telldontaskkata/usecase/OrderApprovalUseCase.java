@@ -1,6 +1,7 @@
 package it.gabrieletondi.telldontaskkata.usecase;
 
 import it.gabrieletondi.telldontaskkata.domain.Order;
+import it.gabrieletondi.telldontaskkata.domain.OrderId;
 import it.gabrieletondi.telldontaskkata.repository.OrderRepository;
 
 public class OrderApprovalUseCase {
@@ -19,7 +20,7 @@ public class OrderApprovalUseCase {
 	}
 
 	private void rejectOrder( final int orderId ) {
-		final Order order = orderRepository.getById( orderId );
+		final Order order = orderRepository.getById( OrderId.of( orderId ) );
 		if ( order.canReject() ) {
 			order.rejected();
 			orderRepository.save( order );
@@ -29,7 +30,7 @@ public class OrderApprovalUseCase {
 	}
 
 	private void approveOrder( final int orderId ) {
-		final Order order = orderRepository.getById( orderId );
+		final Order order = orderRepository.getById( OrderId.of( orderId ) );
 		if ( order.canApprove() ) {
 			order.approved();
 			orderRepository.save( order );

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.gabrieletondi.telldontaskkata.domain.Order;
+import it.gabrieletondi.telldontaskkata.domain.OrderId;
 import it.gabrieletondi.telldontaskkata.repository.OrderRepository;
 
 public class TestOrderRepository implements OrderRepository {
@@ -20,8 +21,8 @@ public class TestOrderRepository implements OrderRepository {
     }
 
     @Override
-    public Order getById(int orderId) {
-        return orders.stream().filter(o -> o.getId() == orderId).findFirst().get();
+    public Order getById( OrderId orderId ) {
+        return orders.stream().filter( o -> o.getId().equals( orderId ) ).findFirst().get();
     }
 
     public void addOrder(Order order) {

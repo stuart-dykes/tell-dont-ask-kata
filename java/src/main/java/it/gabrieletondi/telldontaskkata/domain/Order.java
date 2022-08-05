@@ -9,17 +9,17 @@ import java.util.List;
 public class Order {
 	private static final String EUR = "EUR";
 
-	private int id;
+	private final OrderId id;
 	private OrderState state;
 	private final List<OrderItem> items;
 
-	private Order( final int id, final OrderState state, final List<OrderItem> items ) {
+	private Order( final OrderId id, final OrderState state, final List<OrderItem> items ) {
 		this.id = id;
 		this.state = state;
-		this.items = items;
+		this.items = List.copyOf( items );
 	}
 
-	public int getId() {
+	public OrderId getId() {
 		return id;
 	}
 
@@ -75,22 +75,22 @@ public class Order {
 	}
 
 	public static Order create( final List<OrderItem> items ) {
-		return new Order( -1, new CreatedOrderState(), items );
+		return new Order( null, new CreatedOrderState(), items );
 	}
 
 	public static Order loadCreated( final int id ) {
-		return new Order( id, new CreatedOrderState(), new ArrayList<>() );
+		return new Order( OrderId.of( id ), new CreatedOrderState(), new ArrayList<>() );
 	}
 
 	public static Order loadApproved( final int id ) {
-		return new Order( id, new ApprovedOrderState(), new ArrayList<>() );
+		return new Order( OrderId.of( id ), new ApprovedOrderState(), new ArrayList<>() );
 	}
 
 	public static Order loadRejected( final int id ) {
-		return new Order( id, new RejectedOrderState(), new ArrayList<>() );
+		return new Order( OrderId.of( id ), new RejectedOrderState(), new ArrayList<>() );
 	}
 
 	public static Order loadShipped( final int id ) {
-		return new Order( id, new ShippedOrderState(), new ArrayList<>() );
+		return new Order( OrderId.of( id ), new ShippedOrderState(), new ArrayList<>() );
 	}
 }
