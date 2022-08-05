@@ -1,5 +1,7 @@
 package it.gabrieletondi.telldontaskkata.domain;
 
+import static java.math.BigDecimal.ZERO;
+
 import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.CREATED;
 import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.REJECTED;
 import static it.gabrieletondi.telldontaskkata.domain.OrderStatus.SHIPPED;
@@ -15,79 +17,78 @@ import it.gabrieletondi.telldontaskkata.usecase.RejectedOrderCannotBeApprovedExc
 import it.gabrieletondi.telldontaskkata.usecase.ShippedOrdersCannotBeChangedException;
 
 public class Order {
-    private final List<OrderItem> items = new ArrayList<>();
-    private BigDecimal tax = new BigDecimal( "0.00" );
-    private BigDecimal total = new BigDecimal( "0.00" );
-    private OrderStatus status = CREATED;
-    private int id;
+	private int id;
+	private OrderStatus status = CREATED;
+	private final List<OrderItem> items = new ArrayList<>();
 
-    public BigDecimal getTotal() {
-        return total;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public String getCurrency() {
-        return "EUR";
-    }
+	public OrderStatus getStatus() {
+		return status;
+	}
 
-    public List<OrderItem> getItems() {
-        return items;
-    }
+	public List<OrderItem> getItems() {
+		return items;
+	}
 
-    public BigDecimal getTax() {
-        return tax;
-    }
+	public String getCurrency() {
+		return "EUR";
+	}
 
-    public OrderStatus getStatus() {
-        return status;
-    }
+	public BigDecimal getTotal() {
+		return items.stream()
+				.map( OrderItem::getTaxedAmount )
+				.reduce( BigDecimal::add )
+				.orElse( ZERO );
+	}
 
-    public int getId() {
-        return id;
-    }
+	public BigDecimal getTax() {
+		return items.stream().map( OrderItem::getTax ).reduce( BigDecimal::add ).orElse( ZERO );
+	}
 
-    public void setId( int id ) {
-        this.id = id;
-    }
+	public void setId( int id ) {
+		this.id = id;
+	}
 
-    public static Order create() {
-        return new Order();
-    }
+	public static Order create() {
+		return new Order();
+	}
 
-    public void addItem( final OrderItem item ) {
-        items.add( item );
-        this.total = getTotal().add( item.getTaxedAmount() );
-        this.tax = getTax().add( item.getTax() );
-    }
+	public void addItem( final OrderItem item ) {
+		items.add( item );
+	}
 
-    public void approved() {
-        if ( getStatus().equals( OrderStatus.SHIPPED ) ) {
-            throw new ShippedOrdersCannotBeChangedException();
-        }
+	public void approved() {
+		if ( getStatus().equals( OrderStatus.SHIPPED ) ) {
+			throw new ShippedOrdersCannotBeChangedException();
+		}
 
-        if ( getStatus().equals( OrderStatus.REJECTED ) ) {
-            throw new RejectedOrderCannotBeApprovedException();
-        }
-        this.status = OrderStatus.APPROVED;
-    }
+		if ( getStatus().equals( OrderStatus.REJECTED ) ) {
+			throw new RejectedOrderCannotBeApprovedException();
+		}
+		this.status = OrderStatus.APPROVED;
+	}
 
-    public void rejected() {
-        if ( getStatus().equals( OrderStatus.SHIPPED ) ) {
-            throw new ShippedOrdersCannotBeChangedException();
-        }
-        if ( getStatus().equals( OrderStatus.APPROVED ) ) {
-            throw new ApprovedOrderCannotBeRejectedException();
-        }
-        this.status = OrderStatus.REJECTED;
-    }
+	public void rejected() {
+		if ( getStatus().equals( OrderStatus.SHIPPED ) ) {
+			throw new ShippedOrdersCannotBeChangedException();
+		}
+		if ( getStatus().equals( OrderStatus.APPROVED ) ) {
+			throw new ApprovedOrderCannotBeRejectedException();
+		}
+		this.status = OrderStatus.REJECTED;
+	}
 
-    public void shipped() {
-        if ( getStatus().equals( CREATED ) || getStatus().equals( REJECTED ) ) {
-            throw new OrderCannotBeShippedException();
-        }
+	public void shipped() {
+		if ( getStatus().equals( CREATED ) || getStatus().equals( REJECTED ) ) {
+			throw new OrderCannotBeShippedException();
+		}
 
-        if ( getStatus().equals( SHIPPED ) ) {
-            throw new OrderCannotBeShippedTwiceException();
-        }
-        this.status = OrderStatus.SHIPPED;
-    }
+		if ( getStatus().equals( SHIPPED ) ) {
+			throw new OrderCannotBeShippedTwiceException();
+		}
+		this.status = OrderStatus.SHIPPED;
+	}
 }
