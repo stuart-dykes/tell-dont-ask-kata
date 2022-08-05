@@ -15,7 +15,7 @@ public class OrderCreationUseCase {
 	}
 
 	public void run( SellItemsRequest request ) {
-		Order order = Order.create();
+		Order order = new Order();
 
 		request.getRequests()
 				.stream()

@@ -52,10 +52,6 @@ public class Order {
 		this.id = id;
 	}
 
-	public static Order create() {
-		return new Order();
-	}
-
 	public void addItem( final OrderItem item ) {
 		items.add( item );
 	}
