@@ -18,12 +18,8 @@ public class Order {
     private final List<OrderItem> items = new ArrayList<>();
     private BigDecimal tax = new BigDecimal( "0.00" );
     private BigDecimal total = new BigDecimal( "0.00" );
-    private OrderStatus status;
+    private OrderStatus status = CREATED;
     private int id;
-
-    public Order( final OrderStatus status ) {
-        this.status = status;
-    }
 
     public BigDecimal getTotal() {
         return total;
@@ -54,7 +50,7 @@ public class Order {
     }
 
     public static Order create() {
-        return new Order( OrderStatus.CREATED );
+        return new Order();
     }
 
     public void addItem( final OrderItem item ) {

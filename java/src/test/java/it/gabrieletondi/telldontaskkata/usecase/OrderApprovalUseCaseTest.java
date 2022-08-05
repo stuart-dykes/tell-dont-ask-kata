@@ -15,7 +15,7 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void approvedExistingOrder() {
-		Order initialOrder = new Order( OrderStatus.CREATED );
+		Order initialOrder = new Order();
 		initialOrder.setId( 1 );
 		orderRepository.addOrder( initialOrder );
 
@@ -31,7 +31,7 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void rejectedExistingOrder() {
-		Order initialOrder = new Order( OrderStatus.CREATED );
+		Order initialOrder = new Order();
 		initialOrder.setId( 1 );
 		orderRepository.addOrder( initialOrder );
 
@@ -47,8 +47,9 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void cannotApproveRejectedOrder() {
-		Order initialOrder = new Order( OrderStatus.REJECTED );
+		Order initialOrder = new Order();
 		initialOrder.setId( 1 );
+		initialOrder.rejected();
 		orderRepository.addOrder( initialOrder );
 
 		OrderApprovalRequest request = new OrderApprovalRequest();
@@ -62,8 +63,9 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void cannotRejectApprovedOrder() {
-		Order initialOrder = new Order( OrderStatus.APPROVED );
+		Order initialOrder = new Order();
 		initialOrder.setId( 1 );
+		initialOrder.approved();
 		orderRepository.addOrder( initialOrder );
 
 		OrderApprovalRequest request = new OrderApprovalRequest();
@@ -77,8 +79,10 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void shippedOrdersCannotBeApproved() {
-		Order initialOrder = new Order( OrderStatus.SHIPPED );
+		Order initialOrder = new Order();
 		initialOrder.setId( 1 );
+		initialOrder.approved();
+		initialOrder.shipped();
 		orderRepository.addOrder( initialOrder );
 
 		OrderApprovalRequest request = new OrderApprovalRequest();
@@ -92,8 +96,10 @@ class OrderApprovalUseCaseTest {
 
 	@Test
 	void shippedOrdersCannotBeRejected() {
-		Order initialOrder = new Order( OrderStatus.SHIPPED );
+		Order initialOrder = new Order();
 		initialOrder.setId( 1 );
+		initialOrder.approved();
+		initialOrder.shipped();
 		orderRepository.addOrder( initialOrder );
 
 		OrderApprovalRequest request = new OrderApprovalRequest();
