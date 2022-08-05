@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.gabrieletondi.telldontaskkata.usecase.ApprovedOrderCannotBeRejectedException;
+import it.gabrieletondi.telldontaskkata.usecase.RejectedOrderCannotBeApprovedException;
+import it.gabrieletondi.telldontaskkata.usecase.ShippedOrdersCannotBeChangedException;
+
 public class Order {
     private BigDecimal total;
     private String currency;
@@ -74,5 +78,26 @@ public class Order {
         order.setTotal( new BigDecimal( "0.00" ) );
         order.setTax( new BigDecimal( "0.00" ) );
         return order;
+    }
+
+    public void approve() {
+        if ( getStatus().equals( OrderStatus.SHIPPED ) ) {
+            throw new ShippedOrdersCannotBeChangedException();
+        }
+
+        if ( getStatus().equals( OrderStatus.REJECTED ) ) {
+            throw new RejectedOrderCannotBeApprovedException();
+        }
+        setStatus( OrderStatus.APPROVED );
+    }
+
+    public void reject() {
+        if ( getStatus().equals( OrderStatus.SHIPPED ) ) {
+            throw new ShippedOrdersCannotBeChangedException();
+        }
+        if ( getStatus().equals( OrderStatus.APPROVED ) ) {
+            throw new ApprovedOrderCannotBeRejectedException();
+        }
+        setStatus( OrderStatus.REJECTED );
     }
 }
