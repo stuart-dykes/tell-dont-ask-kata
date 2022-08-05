@@ -37,17 +37,23 @@ public class OrderCreationUseCase {
 			} else {
 				final OrderItem orderItem = new OrderItem( product, itemRequest.getQuantity() );
 
-				final BigDecimal taxAmount = getTaxAmount( product, itemRequest.getQuantity() );
-				final BigDecimal taxedAmount = getTaxedAmount( product, itemRequest.getQuantity() );
-
-				orderItem.setTax( taxAmount );
-				orderItem.setTaxedAmount( taxedAmount );
+				updateTax( product, orderItem, itemRequest.getQuantity() );
+				updateTaxedAmount( product, orderItem, itemRequest.getQuantity() );
 
 				order.addItem( orderItem );
 			}
 		}
 
 		orderRepository.save( order );
+	}
+
+	private void updateTaxedAmount( final Product product, final OrderItem orderItem,
+			final int quantity ) {
+		orderItem.setTaxedAmount( getTaxedAmount( product, quantity ) );
+	}
+
+	private void updateTax( final Product product, final OrderItem orderItem, final int quantity ) {
+		orderItem.setTax( getTaxAmount( product, quantity ) );
 	}
 
 	private BigDecimal getTaxedAmount( final Product product, final int quantity ) {
