@@ -5,50 +5,34 @@ import static java.math.RoundingMode.HALF_UP;
 import java.math.BigDecimal;
 
 public class OrderItem {
-    private final Product product;
-    private final int quantity;
-    private BigDecimal taxedAmount;
-    private BigDecimal tax;
 
-    public OrderItem( final Product product, final int quantity ) {
-        this.product = product;
-        this.quantity = quantity;
-        updateTax( product, quantity );
-        updateTaxedAmount( product, quantity );
-    }
+	private final Product product;
+	private final int quantity;
+	private final BigDecimal taxedAmount;
+	private final BigDecimal tax;
 
-    public Product getProduct() {
-        return product;
-    }
+	public OrderItem( final Product product, final int quantity ) {
+		this.product = product;
+		this.quantity = quantity;
+		this.tax = product.getUnitaryTax().multiply( BigDecimal.valueOf( quantity ) );
+		this.taxedAmount = product.getUnitaryTaxedAmount()
+				.multiply( BigDecimal.valueOf( quantity ) )
+				.setScale( 2, HALF_UP );
+	}
 
-    public int getQuantity() {
-        return quantity;
-    }
+	public Product getProduct() {
+		return product;
+	}
 
-    public BigDecimal getTaxedAmount() {
-        return taxedAmount;
-    }
+	public int getQuantity() {
+		return quantity;
+	}
 
-    public void setTaxedAmount(BigDecimal taxedAmount) {
-        this.taxedAmount = taxedAmount;
-    }
+	public BigDecimal getTaxedAmount() {
+		return taxedAmount;
+	}
 
-    public BigDecimal getTax() {
-        return tax;
-    }
-
-    public void setTax( BigDecimal tax ) {
-        this.tax = tax;
-    }
-
-    public void updateTaxedAmount( final Product product, final int quantity ) {
-        final BigDecimal unitaryTaxedAmount = product.getUnitaryTaxedAmount();
-        setTaxedAmount( unitaryTaxedAmount.multiply( BigDecimal.valueOf( quantity ) )
-                .setScale( 2, HALF_UP ) );
-    }
-
-    public void updateTax( final Product product, final int quantity ) {
-        final BigDecimal unitaryTax = product.getUnitaryTax();
-        setTax( unitaryTax.multiply( BigDecimal.valueOf( quantity ) ) );
-    }
+	public BigDecimal getTax() {
+		return tax;
+	}
 }
